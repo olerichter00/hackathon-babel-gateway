@@ -3,6 +3,8 @@ import translate from '../clients/translationClient'
 const TRANSLATION_KEYS = ['fullName']
 
 const translator = async (obj, fromLanguage, toLanguage) => {
+  if (typeof obj !== 'object') return obj
+
   const keys = Object.keys(obj)
 
   for (const key of keys) {
