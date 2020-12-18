@@ -1,1 +1,1 @@
-web: sh -c 'cd ./graphql-api-gateway/ && yarn start'
+web: sh ./run.sh
