@@ -41,7 +41,7 @@ export const marleyspoonSubschema = async () => ({
 })
 
 // build the combined schema
-export const gatewaySchema = async () =>
+export const createGatewaySchema = async () =>
   stitchSchemas({
     subschemas: [localSubschema, await marleyspoonSubschema()],
   })

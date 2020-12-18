@@ -2,7 +2,7 @@ import fastify, { FastifyInstance } from 'fastify'
 import { Server, IncomingMessage, ServerResponse } from 'http'
 import mercurius from 'mercurius'
 
-import { gatewaySchema as schema } from './graphql/schema'
+import { createGatewaySchema } from './graphql/schema'
 import resolvers from './graphql/resolvers'
 
 require('dotenv').config()
@@ -12,7 +12,7 @@ const server: FastifyInstance<Server, IncomingMessage, ServerResponse> = fastify
 const start = async () => {
   try {
     server.register(mercurius, {
-      schema: await schema(),
+      schema: await createGatewaySchema(),
       resolvers,
     })
 
@@ -22,9 +22,10 @@ const start = async () => {
       return reply.graphql(query)
     })
 
-    await server.listen(process.env.PORT || 3000, '0.0.0.0')
+    const port = process.env.PORT || 3000
+    await server.listen(port, '0.0.0.0')
 
-    console.log(`Server listening on port 3000`)
+    console.log(`Server listening on port ${port}`)
   } catch (err) {
     console.log(err)
     server.log.error(err)
