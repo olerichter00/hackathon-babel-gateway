@@ -1,1 +1,1 @@
-const translatate = async (name, language) => `${language}: ${name}
+const translatate = async (name, fromLanguage, toLanguage) => `${toLanguage}: ${name}
