@@ -1,0 +1,1 @@
+const translatate = async (name, language) => `${language}: ${name}

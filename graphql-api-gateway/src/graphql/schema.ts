@@ -30,7 +30,10 @@ async function remoteExecutor({ document, variables }) {
     },
     body: JSON.stringify({ query, variables }),
   })
-  return fetchResult.json()
+  const jsonResult = await fetchResult.json()
+
+  debugger
+  return jsonResult
 }
 
 export const localSubschema = { schema: localSchema }
