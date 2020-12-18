@@ -1,23 +1,10 @@
+import { introspectSchema } from '@graphql-tools/wrap'
+import { fetch } from 'cross-fetch'
+import { print } from 'graphql'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { stitchSchemas } from '@graphql-tools/stitch'
 
-let postsSchema = makeExecutableSchema({
-  typeDefs: `
-    type Post {
-      id: ID!
-      text: String
-      userId: ID!
-    }
-
-    type Query {
-      postById(id: ID!): Post
-      postsByUserId(userId: ID!): [Post]!
-    }
-  `,
-  resolvers: {},
-})
-
-let usersSchema = makeExecutableSchema({
+let localSchema = makeExecutableSchema({
   typeDefs: `
     type User {
       id: ID!
@@ -32,11 +19,29 @@ let usersSchema = makeExecutableSchema({
   resolvers: {},
 })
 
-// setup subschema configurations
-export const postsSubschema = { schema: postsSchema }
-export const usersSubschema = { schema: usersSchema }
+async function remoteExecutor({ document, variables }) {
+  const query = print(document)
+
+  const fetchResult = await fetch(process.env.MARLEY_SPOON_API_HOST, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: process.env.MARLEY_SPOON_API_TOKEN,
+    },
+    body: JSON.stringify({ query, variables }),
+  })
+  return fetchResult.json()
+}
+
+export const localSubschema = { schema: localSchema }
+
+export const marleyspoonSubschema = async () => ({
+  schema: await introspectSchema(remoteExecutor),
+  executor: remoteExecutor,
+})
 
 // build the combined schema
-export const gatewaySchema = stitchSchemas({
-  subschemas: [postsSubschema, usersSubschema],
-})
+export const gatewaySchema = async () =>
+  stitchSchemas({
+    subschemas: [localSubschema, await marleyspoonSubschema()],
+  })

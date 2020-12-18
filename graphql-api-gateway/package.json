@@ -5,12 +5,14 @@
   "author": "Ole Richter",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node --files ./src/index.ts",
-    "dev": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts"
+    "dev": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
+    "start": "ts-node dist/index.js",
+    "build": "tsc -p ."
   },
   "dependencies": {
     "@graphql-tools/stitch": "^7.1.6",
     "@types/node": "^14.14.14",
+    "dotenv": "^8.2.0",
     "fastify": "^3.9.2",
     "fastify-blipp": "^3.0.0",
     "fastify-plugin": "^3.0.0",
