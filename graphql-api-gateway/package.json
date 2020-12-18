@@ -12,6 +12,7 @@
   "dependencies": {
     "@graphql-tools/stitch": "^7.1.6",
     "@types/node": "^14.14.14",
+    "cross-fetch": "^3.0.6",
     "dotenv": "^8.2.0",
     "fastify": "^3.9.2",
     "fastify-blipp": "^3.0.0",
