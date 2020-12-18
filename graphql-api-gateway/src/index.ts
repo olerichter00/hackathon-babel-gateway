@@ -4,6 +4,7 @@ import mercurius from 'mercurius'
 
 import { createGatewaySchema } from './graphql/schema'
 import resolvers from './graphql/resolvers'
+import {translate} from './clients/translationClient'
 
 require('dotenv').config()
 
@@ -27,13 +28,9 @@ const start = async () => {
 
     console.log(`Server listening on port ${port}`)
 
-    const translatte = require('translatte');
+    const msg = await translate("voce fala alemao?", "de");
+    console.log(`Translated String ${msg}`)
 
-    translatte('Voce fala alemao?', { to: 'de' }).then(res => {
-      console.log(res.text);
-    }).catch(err => {
-      console.error(err);
-    });
   } catch (err) {
     console.log(err)
     server.log.error(err)
