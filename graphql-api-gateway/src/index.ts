@@ -15,7 +15,7 @@ server.register(mercurius, {
 })
 
 server.post('/', async function (req, reply) {
-  const query = '{ add(x: 2, y: 2) }'
+  const query = '{ add(x: 2, y: 3) }'
   return reply.graphql(query)
 })
 
