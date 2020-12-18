@@ -1,20 +1,24 @@
 //const translatate = async (name, fromLanguage, toLanguage) => `${toLanguage}: ${name}
 
-const { AWSTranslateJSON } = require('aws-translate-json');
+import { env } from 'process'
+
+const { AWSTranslateJSON } = require('aws-translate-json')
 
 const awsConfig = {
-    accessKeyId: '...',
-    secretAccessKey: 'D..',
-    region: 'eu-west-1',
+  accessKeyId: process.env.AWS_KEY,
+  secretAccessKey: process.env.ACCESS_KEY,
+  region: 'eu-west-1',
 }
 
-const translate = (recipe: string, source= "de", target = "en") => {
-  const { translateJSON } = new AWSTranslateJSON(awsConfig, source, [target]);
-  translateJSON({
-    key1: recipe,
-}).then(res => {
-  return res["target"]
-});
+const translate = async (value: string, source = 'de', target = 'en') => {
+  return `${source} - ${target}: ${value}`
+  const { translateJSON } = new AWSTranslateJSON(awsConfig, source, [target])
+
+  const result = await translateJSON({
+    key1: value,
+  })
+
+  return result[target].key1
 }
 
 export default translate

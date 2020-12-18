@@ -1,9 +1,10 @@
 import fastify, { FastifyInstance } from 'fastify'
 import { Server, IncomingMessage, ServerResponse } from 'http'
 import mercurius from 'mercurius'
-
+import fp from 'fastify-plugin'
 import { createGatewaySchema } from './graphql/schema'
 import resolvers from './graphql/resolvers'
+import fastifyPlugin from './plugins/fastifyPlugin'
 
 require('dotenv').config()
 
@@ -21,6 +22,8 @@ const start = async () => {
       const query = (req.body as { query }).query as string
       return reply.graphql(query)
     })
+
+    server.register(fp(fastifyPlugin))
 
     const port = process.env.PORT || 3000
     await server.listen(port, '0.0.0.0')

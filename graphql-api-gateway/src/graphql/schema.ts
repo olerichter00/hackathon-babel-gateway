@@ -32,7 +32,6 @@ async function remoteExecutor({ document, variables }) {
   })
   const jsonResult = await fetchResult.json()
 
-  debugger
   return jsonResult
 }
 
