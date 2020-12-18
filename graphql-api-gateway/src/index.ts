@@ -26,6 +26,14 @@ const start = async () => {
     await server.listen(port, '0.0.0.0')
 
     console.log(`Server listening on port ${port}`)
+
+    const translatte = require('translatte');
+
+    translatte('Voce fala alemao?', { to: 'de' }).then(res => {
+      console.log(res.text);
+    }).catch(err => {
+      console.error(err);
+    });
   } catch (err) {
     console.log(err)
     server.log.error(err)
