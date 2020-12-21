@@ -6,13 +6,7 @@ import { stitchSchemas } from '@graphql-tools/stitch'
 
 let localSchema = makeExecutableSchema({
   typeDefs: `
-    type User {
-      id: ID!
-      email: String
-    }
-
     type Query {
-      userById(id: ID!): User
       add(x: Int, y: Int): Int
     }
   `,
@@ -26,18 +20,17 @@ async function remoteExecutor({ document, variables }) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: process.env.MARLEY_SPOON_API_TOKEN,
+      Authorization: `Bearer ${process.env.MARLEY_SPOON_API_TOKEN}`,
     },
     body: JSON.stringify({ query, variables }),
   })
-  const jsonResult = await fetchResult.json()
 
-  return jsonResult
+  return await fetchResult.json()
 }
 
 export const localSubschema = { schema: localSchema }
 
-export const marleyspoonSubschema = async () => ({
+export const createMarleyspoonSubschema = async () => ({
   schema: await introspectSchema(remoteExecutor),
   executor: remoteExecutor,
 })
@@ -45,5 +38,5 @@ export const marleyspoonSubschema = async () => ({
 // build the combined schema
 export const createGatewaySchema = async () =>
   stitchSchemas({
-    subschemas: [localSubschema, await marleyspoonSubschema()],
+    subschemas: [localSubschema, await createMarleyspoonSubschema()],
   })

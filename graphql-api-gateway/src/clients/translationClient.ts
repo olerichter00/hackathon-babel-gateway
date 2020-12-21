@@ -1,11 +1,6 @@
-const translatte = require('translatte');
+const translatte = require('translatte')
 
-const translate = async (msg: string, source= "de", target = "en"): Promise<string> => {
-    return await translatte(msg, { from: source, to: target }).then(res => {
-        return res.text
-    }).catch(err => {
-        throw console.error(err)
-    });
-}
+const translate = async (value: string, from: string, to: string): Promise<string> =>
+  await translatte(value, { from, to }).text
 
 export default translate

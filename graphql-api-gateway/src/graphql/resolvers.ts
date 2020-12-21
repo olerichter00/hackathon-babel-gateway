@@ -1,7 +1,5 @@
 const resolvers = {
-  Query: {
-    add: async (_, { x, y }) => x + y,
-  },
+  Query: {},
 }
 
 export default resolvers

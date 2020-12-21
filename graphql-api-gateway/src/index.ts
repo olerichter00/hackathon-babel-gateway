@@ -4,9 +4,13 @@ import mercurius from 'mercurius'
 import fp from 'fastify-plugin'
 import { createGatewaySchema } from './graphql/schema'
 import resolvers from './graphql/resolvers'
-import fastifyPlugin from './plugins/fastifyPlugin'
+import translationPlugin from './plugins/translationPlugin'
 
 require('dotenv').config()
+
+const TRANSLATION_KEYS = ['fullName']
+const SOURCE_LANGUAGE = 'de'
+const DEFAULT_LANGUAGE = 'en'
 
 const server: FastifyInstance<Server, IncomingMessage, ServerResponse> = fastify()
 
@@ -18,12 +22,16 @@ const start = async () => {
     })
 
     server.post('/', async function (req, reply) {
-      console.log(req.body)
       const query = (req.body as { query }).query as string
+
       return reply.graphql(query)
     })
 
-    server.register(fp(fastifyPlugin))
+    server.register(fp(translationPlugin), {
+      keys: TRANSLATION_KEYS,
+      sourceLanguage: SOURCE_LANGUAGE,
+      defaultLanguage: DEFAULT_LANGUAGE,
+    })
 
     const port = process.env.PORT || 3000
     await server.listen(port, '0.0.0.0')
